@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/jo-hoe/chromaprint"
+	"github.com/orangex/chromaprint"
 )
 
 func main() {
@@ -15,10 +14,10 @@ func main() {
 		fmt.Print(err)
 		return
 	}
-	fingerprints, err := chromaprinter.CreateRawFingerprints("my.mp3")
+	fingerprint, err := chromaprinter.CreateFingerprints("my.mp3")
 	if err != nil {
 		fmt.Print(err)
 		return
 	}
-	fmt.Printf("%+v", fingerprints)
+	fmt.Printf("%+v", fingerprint)
 }
