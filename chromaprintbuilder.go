@@ -99,12 +99,7 @@ func (b *builder) Build() (*Chromaprint, error) {
 			chromaprintFilePath = chromaprintFilePath + windowsExtension
 		}
 
-		folder, err := os.Getwd()
-		if err != nil {
-			return nil, err
-		}
-
-		b.filePath = filepath.Join(folder, chromaprintFilePath)
+		b.filePath = chromaprintFilePath
 	}
 
 	return &Chromaprint{

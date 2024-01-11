@@ -75,14 +75,14 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) (string, er
 	}
 
 	calcResult := &struct{
-		fingerprint string
+		Fingerprint string `json:"fingerprint"`
 	}{}
 	err = json.Unmarshal(out, calcResult)
-	if err != nil || strings.TrimSpace(calcResult.fingerprint)==""{
+	if err != nil || strings.TrimSpace(calcResult.Fingerprint)==""{
 		return "", fmt.Errorf("invalid JSON output from fpcalc: %+v", err)
 	}
 
-	return strings.TrimSpace(calcResult.fingerprint), nil
+	return strings.TrimSpace(calcResult.Fingerprint), nil
 }
 
 func (c *Chromaprint) getArgs() []string {
