@@ -15,7 +15,7 @@ type Chromaprint struct {
 
 type FingerprintData struct {
 	// timestamp in the input audio (starts from 0)
-	// useful in case the output consists of various 
+	// useful in case the output consists of various
 	// chunks
 	TimestampInSeconds float64 `json:"timestamp"`
 	// duration of the fingerprint
@@ -28,7 +28,7 @@ type FingerprintData struct {
 // filepathToAudioFile is the file path to the audio file.
 // In case an error is identified the fingerprint slice will
 // be of length 0 and error will not be nil.
-func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]FingerprintData, error) {
+func (c *Chromaprint) CreateRawFingerprints(filepathToAudioFile string) ([]FingerprintData, error) {
 	result := make([]FingerprintData, 0)
 
 	if _, err := os.Stat(filepathToAudioFile); errors.Is(err, os.ErrNotExist) {
@@ -59,6 +59,30 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 	}
 
 	return result, nil
+}
+func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) (string, error) {
+
+
+	if _, err := os.Stat(filepathToAudioFile); errors.Is(err, os.ErrNotExist) {
+		return "", os.ErrNotExist
+	}
+
+	parameters := []string{filepathToAudioFile, "-json"}
+	parameters = append(parameters, c.getArgs()...)
+	out, err := exec.Command(c.options.filePath, parameters...).Output()
+	if err != nil {
+		return "", err
+	}
+
+	calcResult := &struct{
+		fingerprint string
+	}{}
+	err = json.Unmarshal(out, calcResult)
+	if err != nil || strings.TrimSpace(calcResult.fingerprint)==""{
+		return "", fmt.Errorf("invalid JSON output from fpcalc: %+v", err)
+	}
+
+	return strings.TrimSpace(calcResult.fingerprint), nil
 }
 
 func (c *Chromaprint) getArgs() []string {

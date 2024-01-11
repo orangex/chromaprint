@@ -108,7 +108,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.c.CreateFingerprints(tt.args.filepathToAudioFile)
+			got, err := tt.c.CreateRawFingerprints(tt.args.filepathToAudioFile)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Chromaprint.CreateFingerprints() error = %v, wantErr %v", err, tt.wantErr)
 				return
