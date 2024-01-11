@@ -1,8 +1,6 @@
 package chromaprint
 
 import (
-	"os"
-	"path/filepath"
 	"runtime"
 )
 
